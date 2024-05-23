@@ -100,6 +100,17 @@ type Message struct {
 	ID      string `json:"id"`
 }
 
+type ErrorResponse struct {
+	Error ErrorDetails `json:"error"`
+}
+
+type ErrorDetails struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+	Param   string `json:"param"`
+	Type    string `json:"type"`
+}
+
 type CopilotRequest struct {
 	Token     string
 	SessionId string
@@ -200,7 +211,7 @@ func generateCopilotRequest() CopilotRequest {
 	}
 }
 
-func getResponse(m *model, callback func(string, bool)) string {
+func getResponse(m *model, callback func(string, bool, bool)) string {
 	request, _ := generateAskRequest(m.history)
 	body, err := json.Marshal(request)
 
@@ -245,8 +256,9 @@ func getResponse(m *model, callback func(string, bool)) string {
 	return parseResponse(resp.Body, callback)
 }
 
-func parseResponse(s io.ReadCloser, callback func(string, bool)) string {
+func parseResponse(s io.ReadCloser, callback func(string, bool, bool)) string {
 	dec := bufio.NewReader(s)
+	isError := false
 
 	reply := make([]byte, 0)
 
@@ -258,6 +270,17 @@ func parseResponse(s io.ReadCloser, callback func(string, bool)) string {
 		}
 
 		s := strings.Trim(string(content), " \n\t")
+
+		if strings.HasPrefix(s, `{"error":`) {
+			var error ErrorResponse
+
+			json.Unmarshal([]byte(s), &error)
+
+			reply = []byte(error.Error.Message)
+			isError = true
+
+			break
+		}
 
 		if strings.HasPrefix(s, "[DONE]") {
 			break
@@ -278,14 +301,12 @@ func parseResponse(s io.ReadCloser, callback func(string, bool)) string {
 				txt := message.Choices[0].Delta.Content.(string)
 				reply = append(reply, []byte(txt)...)
 
-				log.Printf(">%s<", txt)
-
-				callback(string(reply), false)
+				callback(string(reply), false, isError)
 			}
 		}
 	}
 
-	callback(string(reply), true)
+	callback(string(reply), true, isError)
 
 	return string(reply)
 }

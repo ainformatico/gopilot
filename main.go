@@ -238,9 +238,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.messages = append(m.messages, createBotHistoryEntry("Thinking..."))
 
 		cmds = append(cmds, func() tea.Msg {
-			getResponse(&m, func(reply string, done bool) {
+			getResponse(&m, func(reply string, done bool, isError bool) {
 
-				if done {
+				if done && !isError {
 					m.answering = false
 
 					return

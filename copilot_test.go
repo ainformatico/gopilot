@@ -67,6 +67,8 @@ func TestParseResponse(t *testing.T) {
 		`, "hello",
 			2},
 		{"", "", 1},
+		{`{"error":{"code":"off_topic","message":"The response was filtered due to the prompt not being programming related. Please modify your prompt and retry.","param":"prompt","type":"invalid_request_error"}}
+		`, "The response was filtered due to the prompt not being programming related. Please modify your prompt and retry.", 1},
 	}
 
 	for _, tt := range tests {
@@ -74,7 +76,7 @@ func TestParseResponse(t *testing.T) {
 		totalCalls := 0
 		finished := false
 
-		got := parseResponse(mockReader, func(s string, b bool) {
+		got := parseResponse(mockReader, func(s string, b bool, e bool) {
 			totalCalls++
 
 			finished = b
