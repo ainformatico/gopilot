@@ -10,6 +10,7 @@ help:
 ## build: build the application
 .PHONY: build
 build:
+	rm gopilot 2>/dev/null || true
 	go build -ldflags="-s -w" -o=${BINARY_NAME} ${MAIN_PACKAGE_PATH}
 
 ## run: run the application
