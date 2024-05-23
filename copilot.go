@@ -215,6 +215,8 @@ func getResponse(m *model, callback func(string, bool, bool)) string {
 	request, _ := generateAskRequest(m.history)
 	body, err := json.Marshal(request)
 
+	log.Println("History:", m.history[1:])
+
 	if err != nil {
 		panic(err)
 	}
@@ -266,10 +268,14 @@ func parseResponse(s io.ReadCloser, callback func(string, bool, bool)) string {
 		content, err := dec.ReadBytes('\n')
 
 		if err != nil {
+			log.Println("Response was not nil:", err)
+
 			break
 		}
 
 		s := strings.Trim(string(content), " \n\t")
+
+		log.Println("Content:", s)
 
 		if strings.HasPrefix(s, `{"error":`) {
 			var error ErrorResponse
@@ -307,6 +313,8 @@ func parseResponse(s io.ReadCloser, callback func(string, bool, bool)) string {
 	}
 
 	callback(string(reply), true, isError)
+
+	log.Println("Reply:", string(reply))
 
 	return string(reply)
 }
