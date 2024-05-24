@@ -64,3 +64,12 @@ This will create a `gopilot.log` file in the project directory with the debug in
 * `Ctrl + p`, `PageUp`: Scroll up in the chat viewport
 * `Ctrl + n`, `PageDown`: Scroll down in the chat viewport
 * `Ctrl + r`: Used only for debugging. Reloads the Github token
+
+## How to develop?
+Well, it's all about reverse engineering APIs.
+
+1. Install and configure [mitmproxy](https://mitmproxy.org/) to [support SSL](https://docs.mitmproxy.org/stable/concepts-certificates/)
+2. [Configure VSCode to use your local proxy](https://device.harmonyos.com/en/docs/documentation/guide/vscode_proxy-0000001074231144)
+3. Use VSCode with Copilot Chat
+4. Check the requests and responses in `mitmproxy`
+5. Profit!
