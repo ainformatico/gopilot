@@ -1,6 +1,12 @@
 # gopilot
 Enjoy Github Copilot on the CLI. Especially powerful when combined with `tmux`.
 
+## nvim
+![nvim](https://github.com/ainformatico/gopilot/assets/161387/2b087c15-c9ed-477c-95b5-a5d2bbbfa9c8)
+
+## cli
+![cli](https://github.com/ainformatico/gopilot/assets/161387/920f88db-71e0-4fc6-84fd-2795ecf87d23)
+
 ## Disclaimer
 This project go as-if. It will be my WIP project to learn Go. You have been warned.
 
