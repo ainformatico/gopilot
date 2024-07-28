@@ -21,3 +21,8 @@ install:
 .PHONY: run
 run: build
 	${BINARY_NAME}
+
+## debug: debug the application
+.PHONY: debug
+debug: build
+	${BINARY_NAME} -d
