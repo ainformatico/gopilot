@@ -133,13 +133,13 @@ type Request struct {
 func generateAskRequest(history []HistoryMessage) (Request, error) {
 	req := Request{
 		Intent:      true,
-		Model:       "gpt-3.5-turbo",
+		Model:       "gpt-4",
 		N:           1,
 		Stream:      true,
 		Temperature: 0.1,
 		TopP:        1,
 		Messages:    history,
-		Maxtokens:   4096,
+		Maxtokens:   8192,
 	}
 
 	return req, nil
@@ -248,7 +248,7 @@ func getResponse(m *model, callback func(string, bool, bool)) string {
 	req.Header.Set("accept", "*/*")
 	req.Header.Set("accept-encoding", "gzip,deflate,br")
 
-	client := &http.Client{Timeout: 10 * time.Second}
+	client := &http.Client{Timeout: 40 * time.Second}
 	resp, err := client.Do(req)
 
 	if err != nil {
